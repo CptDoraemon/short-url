@@ -7,8 +7,8 @@ services:
         - 5672:5672
         - 15672:15672
     volumes:
-        - ./docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
-        - ./docker-conf/rabbitmq/log/:/var/log/rabbitmq
+        - ./docker-persist/rabbitmq/data/:/var/lib/rabbitmq/
+        - ./docker-persist/rabbitmq/log/:/var/log/rabbitmq
     networks:
         - rabbitmq_net
 

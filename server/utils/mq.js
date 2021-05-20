@@ -29,6 +29,16 @@ class MQ {
     this.channel.sendToQueue(this.shortUrlQueue, Buffer.from(msg));
     console.log(`[x] MQ Sent ${msg}`);
   }
+
+  async consumeURL(cb) {
+    try {
+      await this.channel.consume(this.shortUrlQueue, (msg) => cb(msg.content.toString()), {
+        noAck: true
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  }
 }
 
 const mq = new MQ();

@@ -2,7 +2,8 @@ const amqp = require('amqplib/callback_api');
 
 class MQ {
   channel;
-  shortUrlQueue = 'shortUrl';
+  shortUrlEx = 'shortUrlEx';
+  shortUrlBindingKey = 'shortUrl';
 
   connect() {
     return new Promise((resolve, reject) => {
@@ -21,23 +22,29 @@ class MQ {
     })
   }
 
-  addURL(msg) {
-    this.channel.assertQueue(this.shortUrlQueue, {
-      durable: false
+  setupExchange() {
+    this.channel.assertExchange(this.shortUrlEx, 'direct', {
+      durable: true
     });
-
-    this.channel.sendToQueue(this.shortUrlQueue, Buffer.from(msg));
-    console.log(`[x] MQ Sent ${msg}`);
   }
 
   async consumeURL(cb) {
     try {
-      await this.channel.consume(this.shortUrlQueue, (msg) => cb(msg.content.toString()), {
+      const q = await this.channel.assertQueue('', {
+        exclusive: true
+      });
+      channel.bindQueue(q.queue, this.shortUrlEx, this.shortUrlBindingKey);
+      await this.channel.consume(q.queue, (msg) => cb(msg.content.toString()), {
         noAck: true
       });
     } catch (e) {
-      console.log(e);
+      console.log(e)
     }
+  }
+
+  addURL(msg) {
+    channel.publish(this.channel, this.shortUrlBindingKey, Buffer.from(msg));
+    console.log(`[x] MQ Sent ${msg}`);
   }
 }
 

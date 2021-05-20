@@ -1,12 +1,10 @@
 const express = require('express');
 const app = express();
 
-app.use('/addURL', require('./addURLToQueue').router);
-
 app.get('/hello', (req, res) => {
   return res.json({
     status: 'ok',
-    message: 'hello'
+    message: 'hello, this is consumer server'
   })
 });
 

@@ -82,6 +82,13 @@ const LandingPage: React.FC = () => {
             </Alert>
           }
 
+          {
+            form.submittedUrl &&
+            <Alert severity="success" className={classes.alert}>
+              { `${form.submittedUrl} is sent successfully` }
+            </Alert>
+          }
+
           <div className={classes.formRow}>
             <TextField label="Original URL" variant={'outlined'} className={classes.textField} value={form.input} onChange={form.handleChange} disabled={form.isLoading}/>
             <Button
